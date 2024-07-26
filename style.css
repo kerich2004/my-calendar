@@ -1,0 +1,58 @@
+body {
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(7, 150px);
+}
+
+.item,
+.day {
+  border: 1px solid black;
+  height: 20px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+}
+
+header {
+  display: flex;
+  width: 800px;
+  justify-content: space-evenly;
+  margin: 20px 0;
+}
+
+
+
+.today {
+  background: wheat;
+  font-weight: bold;
+}
+
+.another-month-day {
+  color: gray;
+}
+
+.weekend {
+  background-color: aqua;
+}
+
+ol {
+  padding-left: 130px;
+  text-align: left;
+}
+
+li {
+  padding-left: 10px;
+}
+
+li::marker {
+  /* content: var(--date); */
+  content: attr(data-date);
+}

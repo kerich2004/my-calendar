@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <button>prev</button>
+    <div class="month">Month</div>
+    <button>next</button>
+
+    <label>
+      Enter date
+      <input type="date">
+      <button>ok</button>
+    </label>
+    <span>Time</span>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="item">Понедельник</div>
+      <div class="item">Вторник</div>
+      <div class="item">Среда</div>
+      <div class="item">Четверг</div>
+      <div class="item">Пятница</div>
+      <div class="item">Суббота</div>
+      <div class="item">Воскресенье</div>
+    </div>
+    <div class="container calendar">
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+      <div class="item day-number"></div>
+    </div>
+
+    <ol>
+      <li data-date="2024-05-22">Заметка1</li>
+    </ol>
+  </main>
+
+  <dialog id="dialog"> 
+    <form action="">
+      <h3>Добавить заметку</h3>
+      <input type="hidden" name="date">
+      <label>
+        Текст
+        <input name="text" type="text">
+      </label>
+      <div>
+        <button>Добавить</button>
+        <button type="button">Отмена</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+
+</html>
