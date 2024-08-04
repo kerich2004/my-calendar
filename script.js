@@ -2,25 +2,41 @@ const calendar = document.querySelector('.calendar')
 const dayCells = document.querySelectorAll('.day-number')
 const dateInput = document.querySelector('input')
 const monthOut = document.querySelector('.month')
-const [prevBtn, nextBtn, okBtn] = document.querySelectorAll('button')
+const [prevBtn, nextBtn, okBtn, hideListBtn, clearNotesBtn, addBtn, editBtn, deleteBtn, cancelBtn] = document.querySelectorAll('button')
 const timeSpan = document.querySelector('span')
 const ol = document.querySelector('ol')
+const li = document.querySelectorAll('li')
 const dialog = document.getElementById('dialog')
 const form = document.querySelector('form')
+const selectTypeNote = document.querySelector('#type-note')
+const sortNoteSelect = document.querySelector('#sort-select')
+const sortBlock = document.querySelector('.sort-notes-block')
+
+const ls = localStorage
 
 prevBtn.addEventListener('click', prevMonth)
 nextBtn.addEventListener('click', nextMonth)
 okBtn.addEventListener('click', showInputDate)
+ol.addEventListener('click', showDialog)
 
 let date = new Date()
 let year = date.getFullYear()
 let month = date.getMonth()
 const today = date.getDate() - 1
 let dateValue = dateInput.value
+let currentItem = ''
+let index = 0
 
 calendar.onclick = showDialog
 dialog.onsubmit = createNote
-dialog.onclick = hideDialog
+cancelBtn.onclick = hideDialog
+editBtn.onclick = editNote
+deleteBtn.onclick = deleteNote
+hideListBtn.onclick = hideList
+clearNotesBtn.onclick = clearNotes
+sortNoteSelect.onchange = changeSort
+
+let notes = JSON.parse(ls.getItem('notes')) || []
 
 setInterval(showTime, 1000)
 renderCalendar()
@@ -29,7 +45,7 @@ function renderCalendar() {
   let firstDay = new Date(year, month, 1).getDay() - 1
   let lastDate = new Date(year, month + 1, 0).getDate()
 
-  dateInput.value = `${year}-${String(month + 1).padStart(2, '0')}-${today + 1}`
+  dateInput.value = `${year}-${String(month + 1).padStart(2, '0')}-${lastDate}`
 
   if (firstDay < 0) firstDay = 6
 
@@ -40,6 +56,7 @@ function renderCalendar() {
     dayCells[j].dataset.date = `${year}-${(month + 1).toString().padStart(2, 0)}-${i.toString().padStart(2, 0)}`
   }
 
+  renderNotes()
   showWeekends()
   showToday(firstDay)
   showPrevMonthDays(firstDay)
@@ -64,8 +81,8 @@ function showPrevMonthDays(firstDay) {
 
 function showNextMonthDays(firstDay, lastDate) {
   const m = (month + 1) % 12
-  const y = year + (month == 0) 
-  
+  const y = year + (month == 0)
+
   for (let i = firstDay + lastDate, j = 1; i < dayCells.length; i++, j++) {
     dayCells[i].innerHTML = j
     dayCells[i].classList.add('another-month-day')
@@ -120,7 +137,6 @@ function showToday(firstDay) {
   // else dayCells[firstDay + today].classList.remove('today')
 }
 
-
 function showWeekends() {
   for (let i = 6; i <= dayCells.length; i += 7) {
     dayCells[i].classList.add('weekend')
@@ -157,32 +173,134 @@ function showTime() {
 function createNote(e) {
   e.preventDefault()
 
-  const note = document.createElement('li')
+  let objNote = {
+    date: form.date.value,
+    text: form.text.value,
+    type: selectTypeNote.value
+  }
 
-  note.dataset.date = form.date.value
-  note.innerText = form.text.value.trim()
-
-  ol.append(note)
+  notes.push(objNote)
+  addToLs()
   dialog.close()
-  sortNotes()
+  // sortNotes()
 }
 
 function showDialog(e) {
   const cell = e.target
-
-  dialog.showModal()
   form.reset()
+
+  if (cell.tagName == 'LI') {
+    currentItem = cell
+    index = cell.getAttribute('index')
+    currentItem.classList.add('selected-item')
+    addBtn.style = 'display: none'
+    editBtn.style = 'display: block'
+    deleteBtn.style = 'display: block'
+    form.text.value = notes[index].text
+  }
+  else {
+    addBtn.style = 'display: block'
+    editBtn.style = 'display: none'
+    deleteBtn.style = 'display: none'
+  }
   form.date.value = cell.dataset.date
+  dialog.showModal()
 }
 
 function hideDialog(e) {
   if (e.target == dialog || e.target.type == 'button') dialog.close()
+  if (currentItem.classList) currentItem.classList.remove('selected-item')
 }
 
-function sortNotes() {
-  const notes = [...ol.children]
+function sortByDate() {
+  // const notes = [...ol.children]
 
-  notes.sort((a, b) => a.dataset.date.localeCompare(b.dataset.date))
-  
+  notes.sort((a, b) => a.date.localeCompare(b.date))
+
   ol.append(...notes)
+
+  addToLs()
+  renderNotes()
 }
+
+function editNote(e) {
+  e.preventDefault(e)
+
+  notes[index].text = form.text.value
+  notes[index].type = selectTypeNote.value
+
+  addToLs()
+  renderNotes()
+  dialog.close()
+}
+
+function deleteNote(e) {
+  e.preventDefault()
+  notes.splice(index, 1)
+
+  addToLs()
+  renderNotes()
+  dialog.close()
+}
+
+function hideList() {
+  if (ol.classList.contains('hidden-element')) {
+    hideListBtn.textContent = 'Скрыть заметки'
+    ol.classList.remove('hidden-element')
+    ol.classList.add('animation-element')
+    return
+  }
+
+  ol.classList.add('hidden-element')
+  ol.classList.remove('animation-element')
+  hideListBtn.textContent = 'Показать заметки'
+}
+
+function addToLs() {
+  ls.setItem('notes', JSON.stringify(notes))
+
+  renderNotes()
+}
+
+
+function renderNotes() {
+  console.log(notes)
+  let content = ''
+
+  for (let i = 0; i < notes.length; i++) {
+    content += `<li data-date="${notes[i].date}" index = ${i}> ${notes[i].text} (${notes[i].type})</li>`
+  }
+  ol.innerHTML = content
+
+}
+
+function clearNotes() {
+  ls.clear()
+
+  document.location.reload();
+}
+
+function changeSort() {
+  if (sortNoteSelect.value == 'date') {
+    sortByDate()
+  } else if (sortNoteSelect.value = 'type') {
+    sortByType()
+  }
+}
+
+function sortByType() {
+  notes.sort((a, b) => a.type.localeCompare(b.type))
+
+  addToLs()
+  renderNotes()
+}
+
+
+Object.defineProperty(
+  HTMLLIElement.prototype, 
+  'index', {
+    get(){
+      return [...this.parentElement.children].indexOf(this)
+    }
+  }
+)

@@ -1,5 +1,5 @@
 body {
-  text-align: center;
+  /* text-align: center; */
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
 }
@@ -17,18 +17,23 @@ body {
   cursor: pointer;
 }
 
+.container, .calendar {
+  text-align: center;
+}
+
 button {
   cursor: pointer;
 }
 
 header {
   display: flex;
-  width: 800px;
   justify-content: space-evenly;
   margin: 20px 0;
 }
 
-
+#hide-select-btn {
+  width: 150px;
+}
 
 .today {
   background: wheat;
@@ -46,13 +51,43 @@ header {
 ol {
   padding-left: 130px;
   text-align: left;
+  width: 500px;
 }
 
 li {
   padding-left: 10px;
+
+  &::marker {
+    content: attr(data-date);
+  }
+  &:hover {
+    color: blueviolet;
+    cursor: pointer;
+  }
 }
 
-li::marker {
-  /* content: var(--date); */
-  content: attr(data-date);
+
+dialog div {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.selected-item {
+  color: silver;
+}
+
+.animation-element {
+  opacity: 1;
+  transition: 1.5s;
+  overflow: hidden;
+  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}
+
+.hidden-element {
+  opacity: 0;
+  transition: 1.5s;
+}
+
+.sort-notes-block:not(:has(+ol>:nth-child(2))) {
+  display: none;
 }

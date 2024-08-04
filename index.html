@@ -21,6 +21,8 @@
       <button>ok</button>
     </label>
     <span>Time</span>
+    <button id="hide-select-btn">Скрыть заметки</button>
+    <button>Очистить заметки</button>
   </header>
 
   <main>
@@ -77,13 +79,17 @@
       <div class="item day-number"></div>
       <div class="item day-number"></div>
     </div>
-
+    <div class="sort-notes-block">Сортировать по:
+      <select id="sort-select">
+        <option value="date">Дате</option>
+        <option value="type">Типу</option>
+      </select>
+    </div>
     <ol>
-      <li data-date="2024-05-22">Заметка1</li>
     </ol>
   </main>
 
-  <dialog id="dialog"> 
+  <dialog id="dialog">
     <form action="">
       <h3>Добавить заметку</h3>
       <input type="hidden" name="date">
@@ -91,8 +97,17 @@
         Текст
         <input name="text" type="text">
       </label>
+      <label>
+        <select id="type-note">
+          <option>Работа</option>
+          <option>Личное</option>
+        </select>
+
+      </label>
       <div>
         <button>Добавить</button>
+        <button id="edit-btn">Изменить</button>
+        <button id="delete-btn">Удалить</button>
         <button type="button">Отмена</button>
       </div>
     </form>
